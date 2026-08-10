@@ -12,7 +12,7 @@ id_tanque : INT <<PK>>
 --
 nome : VARCHAR(100)
 tipo : VARCHAR(50)
-volume_m3 : DECIMAL(10,2)
+volume : DECIMAL(10,2)
 status : VARCHAR(30)
 }
 
@@ -39,23 +39,18 @@ id_medicao : INT <<PK>>
 id_tanque : INT <<PK>>
 id_piscicultor : INT <<PK>>
 data_hora : DATETIME
-oxigenio_dissolvido : DECIMAL(4,2)  
-temperatura_c : DECIMAL(4,2)        
-ph : DECIMAL(3,2)                   
-amonia_mg_l : DECIMAL(4,2)            
-mortalidade_contada : INT             
+temperatura : DECIMAL(4,2)                 
+mortalidade : INT             
 observacao : VARCHAR(255)
 }
 
 entity "ALERTA_PARAMETRO" as alerta {
 id_alerta : INT <<PK>>
 --
-id_medicao : INT <<PK>>
-parametro : VARCHAR(50)             
+id_medicao : INT <<PK>>          
 valor_medido : DECIMAL(6,2)
-nivel_criticidade : VARCHAR(20)     
-recomendacao_acao : VARCHAR(255)    
-data_hora_geracao : DATETIME
+recomendacao : VARCHAR(255)    
+data_hora : DATETIME
 }
 
 ' RELACIONAMENTOS E CARDINALIDADES (Crow's Foot)
