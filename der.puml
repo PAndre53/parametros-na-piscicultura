@@ -1,0 +1,84 @@
+@startuml Modelo_DER
+
+' Configurações visuais do diagrama
+hide circle
+skinparam linetype ortho
+
+' Definition das Entidades
+ entity "TANQUE" as tanque {
+  * id_tanque : INT <<PK>>
+  --
+  * nome : VARCHAR(100)
+  * tipo : VARCHAR(50)
+  * volume_m3 : DECIMAL(10,2)
+    status : VARCHAR(30)
+}
+
+entity "LOTE" as lote {
+  * id_lote : INT <<PK>>
+  --
+  * id_tanque : INT <<FK>>
+  * especie : VARCHAR(100)
+  * quantidade_inicial : INT
+  * data_povoamento : DATETIME peso_inicial_g : DECIMAL(8,2)
+    status : VARCHAR(30)
+}
+
+ entity "MEDICAO_AGUA" as medicao {
+  * id_medicao : INT <<PK>>
+  --
+  * id_tanque : INT <<FK>>
+  * data_hora : DATETIME
+  * oxigenio_dissolvido : DECIMAL(4,2)
+  * temperatura_c : DECIMAL(4,2)
+  * ph : DECIMAL(3,2)
+  * amonia_mg_l : DECIMAL(4,2)
+    observacao : VARCHAR(255)
+}
+
+entity "BIOMETRIA" as biometria {
+  * id_biometria : INT <<PK>>
+  --
+  * id_lote : INT <<PK>>
+  * data_biometria : DATETIME
+  * peso_medio_g : DECIMAL(8,2)
+  * comprimento_cm : DECIMAL(6,2)
+    quantidade_amostrada : INT
+}
+
+ entity "ALIMENTACAO" as alimentacao {
+  * id_alimentacao : INT <<PK>>
+  --
+  * id_lote : INT <<PK>>
+  * id_racao : INT <<PK>>
+  * data_hora : DATETIME
+    quantidade_kg : DECIMAL(8,2)
+}
+
+entity "RACAO" as racao {
+  * id_racao : INT <<PK>>
+  --
+  * nome_racao : VARCHAR(100)
+  * proteina_bruta_pct : DECIMAL(4,2)
+  * tamanho_grao_mm : DECIMAL(4,2)
+    estoque_kg : DECIMAL(10,2)
+}
+
+entity "MORTALIDADE" as mortalidade {
+  * id_mortalidade : INT <<PK>>
+  --
+  * id_lote : INT <<PK>>
+  * data_hora : DATETIME
+  * quantidade_mortos : INT
+    causa_provavel : VARCHAR(150)
+}
+
+' Relacionamentos e Cardinalidades (Crow's Foot)
+tanque ||--o{ lote : "abriga"
+tanque ||--o{ medicao : "monitora"
+lote ||--o{ biometria : "acompanha crescimento com"
+lote ||--o{ mortalidade : "registra perdas em"
+lote ||--o{ alimentacao : "recebe trato em"
+racao ||--o{ alimentacao : "é fornecida em"
+
+@enduml 

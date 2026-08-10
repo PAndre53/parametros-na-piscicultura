@@ -1,0 +1,66 @@
+@startuml Modelo_DER
+
+' CONFIGURAÇÕES VISUAIS DO PLANTUML
+hide circle
+skinparam linetype ortho
+
+' ENTIDADES DO ESCOPO DA ISSUE
+
+
+entity "TANQUE" as tanque {
+id_tanque : INT <<PK>>
+--
+nome : VARCHAR(100)
+tipo : VARCHAR(50)
+volume_m3 : DECIMAL(10,2)
+status : VARCHAR(30)
+}
+
+entity "PISCICULTOR" as usuario {
+id_piscicultor : INT <<PK>>
+--
+nome : VARCHAR(100)
+cargo : VARCHAR(50)
+telefone : VARCHAR(20)
+}
+
+entity "LOTE" as lote {
+id_lote : INT <<PK>>
+--
+id_tanque : INT <<PK>>
+especie : VARCHAR(100)
+quantidade_peixes : INT
+status : VARCHAR(30)
+}
+
+entity "MEDICAO_AGUA" as medicao {
+id_medicao : INT <<PK>>
+--
+id_tanque : INT <<PK>>
+id_piscicultor : INT <<PK>>
+data_hora : DATETIME
+oxigenio_dissolvido : DECIMAL(4,2)  -
+temperatura_c : DECIMAL(4,2)        
+ph : DECIMAL(3,2)                   
+amonia_mg_l : DECIMAL(4,2)            
+mortalidade_contada : INT             
+observacao : VARCHAR(255)
+}
+
+entity "ALERTA_PARAMETRO" as alerta {
+id_alerta : INT <<PK>>
+--
+id_medicao : INT <<PK>>
+parametro : VARCHAR(50)             
+valor_medido : DECIMAL(6,2)
+nivel_criticidade : VARCHAR(20)     
+recomendacao_acao : VARCHAR(255)    
+data_hora_geracao : DATETIME
+}
+
+' RELACIONAMENTOS E CARDINALIDADES (Crow's Foot)
+
+tanque   ||--o{ lote : "abriga"
+tanque   ||--o{ medicao : "possui registros em"
+usuario  ||--o{ medicao : "realiza e assina"
+medicao  ||--o{ alerta : "pode disparar 0 ou N"
