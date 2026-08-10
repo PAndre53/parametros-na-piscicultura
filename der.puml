@@ -10,7 +10,7 @@ skinparam linetype ortho
   --
   * nome : VARCHAR(100)
   * tipo : VARCHAR(50)
-  * volume_m3 : DECIMAL(10,2)
+  * volume : DECIMAL(10,2)
     status : VARCHAR(30)
 }
 
@@ -29,10 +29,8 @@ entity "LOTE" as lote {
   --
   * id_tanque : INT <<FK>>
   * data_hora : DATETIME
-  * oxigenio_dissolvido : DECIMAL(4,2)
-  * temperatura_c : DECIMAL(4,2)
-  * ph : DECIMAL(3,2)
-  * amonia_mg_l : DECIMAL(4,2)
+  * oxigenio : DECIMAL(4,2)
+  * temperatura : DECIMAL(4,2)
     observacao : VARCHAR(255)
 }
 
@@ -41,8 +39,8 @@ entity "BIOMETRIA" as biometria {
   --
   * id_lote : INT <<PK>>
   * data_biometria : DATETIME
-  * peso_medio_g : DECIMAL(8,2)
-  * comprimento_cm : DECIMAL(6,2)
+  * peso_medio : DECIMAL(8,2)
+  * comprimento : DECIMAL(6,2)
     quantidade_amostrada : INT
 }
 
@@ -59,8 +57,8 @@ entity "RACAO" as racao {
   * id_racao : INT <<PK>>
   --
   * nome_racao : VARCHAR(100)
-  * proteina_bruta_pct : DECIMAL(4,2)
-  * tamanho_grao_mm : DECIMAL(4,2)
+  * proteina_bruta : DECIMAL(4,2)
+  * tamanho_grao : DECIMAL(4,2)
     estoque_kg : DECIMAL(10,2)
 }
 
