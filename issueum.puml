@@ -39,7 +39,7 @@ id_medicao : INT <<PK>>
 id_tanque : INT <<PK>>
 id_piscicultor : INT <<PK>>
 data_hora : DATETIME
-oxigenio_dissolvido : DECIMAL(4,2)  -
+oxigenio_dissolvido : DECIMAL(4,2)  
 temperatura_c : DECIMAL(4,2)        
 ph : DECIMAL(3,2)                   
 amonia_mg_l : DECIMAL(4,2)            
