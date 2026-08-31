@@ -1,0 +1,12 @@
+<title>Lista de Pessoas</title>
+<hl>Pessoas Cadastradas</hl>
+<a href="/cadastro"><button>Novo Cadastro</button></a>
+<table border="1" style="margin-top:10px">
+    <tr><th>Nome</th><th>Sexo</th><th>Data</th><th>Cidade</th></tr>
+    {% for p in pessoas %}
+    <tr>
+        <td>{{ p.nome }}</td><td>{{ p.sexo}}</td>
+        <td>{{ p.data_nascimento}}</td><td>{{ p.cidade }}</td>
+    </tr>
+    {% endfor %}
+</table>
