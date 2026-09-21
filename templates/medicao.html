@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Nova Medição</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f7f5;
+            margin: 0;
+        }
+
+        header {
+            background: #176b4d;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 30px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            background: #176b4d;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #0f4d38;
+        }
+
+        .voltar {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            color: #176b4d;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Nova Medição</h1>
+    <p>Registre os parâmetros da água</p>
+</header>
+
+<div class="container">
+
+    <div class="card">
+
+        <form method="POST">
+
+            <label for="ph">
+                pH da água
+            </label>
+
+            <input
+                type="number"
+                id="ph"
+                name="ph"
+                step="0.01"
+                min="0"
+                max="14"
+                required
+                placeholder="Ex.: 7.2"
+            >
+
+
+            <label for="temperatura">
+                Temperatura (°C)
+            </label>
+
+            <input
+                type="number"
+                id="temperatura"
+                name="temperatura"
+                step="0.1"
+                required
+                placeholder="Ex.: 28.5"
+            >
+
+
+            <label for="oxigenio">
+                Oxigênio dissolvido (mg/L)
+            </label>
+
+            <input
+                type="number"
+                id="oxigenio"
+                name="oxigenio"
+                step="0.01"
+                min="0"
+                required
+                placeholder="Ex.: 6.2"
+            >
+
+            <button type="submit">
+                Registrar medição
+            </button>
+
+        </form>
+
+        <a class="voltar" href="/">
+            ← Voltar para o início
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>
+

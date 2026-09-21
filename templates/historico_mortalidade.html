@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Histórico de Mortalidade</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f7f5;
+            margin: 0;
+        }
+
+        header {
+            background: #176b4d;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 900px;
+            margin: 30px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background: #176b4d;
+            color: white;
+        }
+
+        .voltar {
+            display: inline-block;
+            margin-top: 20px;
+            color: #176b4d;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Histórico de Mortalidade</h1>
+</header>
+
+<div class="container">
+
+    <div class="card">
+
+        {% if mortalidades %}
+
+        <table>
+
+            <tr>
+                <th>Data</th>
+                <th>Quantidade</th>
+                <th>Observação</th>
+            </tr>
+
+            {% for registro in mortalidades %}
+
+            <tr>
+
+                <td>
+                    {{ registro.data.strftime('%d/%m/%Y %H:%M') }}
+                </td>
+
+                <td>
+                    {{ registro.quantidade }}
+                </td>
+
+                <td>
+                    {{ registro.observacao or "Sem observação" }}
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+        {% else %}
+
+        <p>Nenhum registro de mortalidade.</p>
+
+        {% endif %}
+
+    </div>
+
+    <a class="voltar" href="/">
+        ← Voltar para o início
+    </a>
+
+</div>
+
+</body>
+</html>
+

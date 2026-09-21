@@ -1,35 +1,280 @@
+
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Pessoas</title>
-    <!-- Link para o arquivo CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Monitoramento da Piscicultura</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f7f5;
+            margin: 0;
+            color: #333;
+        }
+
+        header {
+            background: #176b4d;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        nav {
+            background: #0f4d38;
+            padding: 12px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 12px;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 30px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .alerta {
+            background: #ffe1e1;
+            border-left: 5px solid #d62828;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .sucesso {
+            background: #d8f3dc;
+            border-left: 5px solid #2d6a4f;
+            padding: 12px;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background: #176b4d;
+            color: white;
+        }
+
+        .normal {
+            color: #2d6a4f;
+            font-weight: bold;
+        }
+
+        .fora {
+            color: #d62828;
+            font-weight: bold;
+        }
+
+        .botoes {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .botao {
+            background: #176b4d;
+            color: white;
+            padding: 12px 18px;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .botao:hover {
+            background: #0f4d38;
+        }
+    </style>
 </head>
+
 <body>
-    <div class="container">
-        <h1>Pessoas Cadastradas</h1>
-        
-        <!-- Botão usando a classe do CSS -->
-        <a href="{{ url_for('cadastro') }}" class="btn">Novo Cadastro</a>
-        
+
+<header>
+    <h1>Monitoramento da Piscicultura</h1>
+    <p>Controle dos parâmetros de qualidade da água</p>
+</header>
+
+<nav>
+    <a href="/">Início</a>
+    <a href="/medicao">Nova Medição</a>
+    <a href="/mortalidade">Registrar Mortalidade</a>
+    <a href="/historico">Histórico</a>
+    <a href="/historico-mortalidade">Mortalidade</a>
+</nav>
+
+<div class="container">
+
+    {% with mensagens = get_flashed_messages(with_categories=true) %}
+        {% for categoria, mensagem in mensagens %}
+            <div class="sucesso">
+                {{ mensagem }}
+            </div>
+        {% endfor %}
+    {% endwith %}
+
+
+    <div class="card">
+        <h2>Alertas</h2>
+
+        {% if alertas %}
+
+            {% for alerta in alertas %}
+                <div class="alerta">
+                    <strong>{{ alerta.data.strftime('%d/%m/%Y %H:%M') }}</strong>
+                    <br>
+                    {{ alerta.mensagem }}
+                </div>
+            {% endfor %}
+
+        {% else %}
+
+            <p class="normal">
+                ✓ Nenhum parâmetro fora dos limites registrados.
+            </p>
+
+        {% endif %}
+    </div>
+
+
+    <div class="card">
+        <h2>Últimas medições</h2>
+
+        {% if medicoes %}
+
         <table>
             <tr>
-                <th>Nome</th>
-                <th>Sexo</th>
-                <th>Data de Nascimento</th>
-                <th>Cidade</th>
+                <th>Data</th>
+                <th>pH</th>
+                <th>Temperatura</th>
+                <th>Oxigênio</th>
+                <th>Status</th>
             </tr>
-            {% for p in pessoas %}
+
+            {% for medicao in medicoes[:10] %}
+
             <tr>
-                <td>{{ p.nome }}</td>
-                <td>{{ p.sexo }}</td>
-                <td>{{ p.data_nascimento }}</td>
-                <td>{{ p.cidade }}</td>
+                <td>
+                    {{ medicao.data.strftime('%d/%m/%Y %H:%M') }}
+                </td>
+
+                <td class="{% if medicao.ph_adequado() %}normal{% else %}fora{% endif %}">
+                    {{ "%.2f"|format(medicao.ph) }}
+                </td>
+
+                <td class="{% if medicao.temperatura_adequada() %}normal{% else %}fora{% endif %}">
+                    {{ "%.1f"|format(medicao.temperatura) }} °C
+                </td>
+
+                <td class="{% if medicao.oxigenio_adequado() %}normal{% else %}fora{% endif %}">
+                    {{ "%.2f"|format(medicao.oxigenio) }} mg/L
+                </td>
+
+                <td>
+                    {% if medicao.esta_adequada() %}
+                        <span class="normal">Normal</span>
+                    {% else %}
+                        <span class="fora">Atenção</span>
+                    {% endif %}
+                </td>
             </tr>
+
             {% endfor %}
+
         </table>
+
+        {% else %}
+
+        <p>Nenhuma medição registrada ainda.</p>
+
+        {% endif %}
     </div>
+
+
+    <div class="card">
+        <h2>Registros de mortalidade</h2>
+
+        {% if mortalidades %}
+
+        <table>
+            <tr>
+                <th>Data</th>
+                <th>Quantidade</th>
+                <th>Observação</th>
+            </tr>
+
+            {% for registro in mortalidades[:10] %}
+
+            <tr>
+                <td>
+                    {{ registro.data.strftime('%d/%m/%Y %H:%M') }}
+                </td>
+
+                <td>
+                    {{ registro.quantidade }}
+                </td>
+
+                <td>
+                    {{ registro.observacao or "Sem observação" }}
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+        {% else %}
+
+        <p>Nenhum registro de mortalidade.</p>
+
+        {% endif %}
+    </div>
+
+
+    <div class="card">
+
+        <h2>Ações</h2>
+
+        <div class="botoes">
+
+            <a class="botao" href="/medicao">
+                Registrar medição
+            </a>
+
+            <a class="botao" href="/mortalidade">
+                Registrar mortalidade
+            </a>
+
+            <a class="botao" href="/historico">
+                Ver histórico
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
 </body>
 </html>

@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Histórico de Medições</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f7f5;
+            margin: 0;
+        }
+
+        header {
+            background: #176b4d;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1100px;
+            margin: 30px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background: #176b4d;
+            color: white;
+        }
+
+        .normal {
+            color: #2d6a4f;
+            font-weight: bold;
+        }
+
+        .fora {
+            color: #d62828;
+            font-weight: bold;
+        }
+
+        .voltar {
+            display: inline-block;
+            margin-top: 20px;
+            color: #176b4d;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Histórico de Medições</h1>
+</header>
+
+<div class="container">
+
+    <div class="card">
+
+        {% if medicoes %}
+
+        <table>
+
+            <tr>
+                <th>Data</th>
+                <th>pH</th>
+                <th>Temperatura</th>
+                <th>Oxigênio</th>
+                <th>Status</th>
+            </tr>
+
+            {% for medicao in medicoes %}
+
+            <tr>
+
+                <td>
+                    {{ medicao.data.strftime('%d/%m/%Y %H:%M') }}
+                </td>
+
+                <td class="{% if medicao.ph_adequado() %}normal{% else %}fora{% endif %}">
+                    {{ "%.2f"|format(medicao.ph) }}
+                </td>
+
+                <td class="{% if medicao.temperatura_adequada() %}normal{% else %}fora{% endif %}">
+                    {{ "%.1f"|format(medicao.temperatura) }} °C
+                </td>
+
+                <td class="{% if medicao.oxigenio_adequado() %}normal{% else %}fora{% endif %}">
+                    {{ "%.2f"|format(medicao.oxigenio) }} mg/L
+                </td>
+
+                <td>
+                    {% if medicao.esta_adequada() %}
+                        <span class="normal">Normal</span>
+                    {% else %}
+                        <span class="fora">Fora do ideal</span>
+                    {% endif %}
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+        {% else %}
+
+        <p>Nenhuma medição registrada.</p>
+
+        {% endif %}
+
+    </div>
+
+    <a class="voltar" href="/">
+        ← Voltar para o início
+    </a>
+
+</div>
+
+</body>
+</html>
+
